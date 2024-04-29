@@ -1,0 +1,202 @@
+import React, { useState } from "react";
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  SafeAreaView,
+  StatusBar,
+  Button,
+  Image,
+} from "react-native";
+
+import { MdClear } from "react-icons/md";
+
+// const btnValues = [
+//   [7, 8, 9, "X"],
+//   [4, 5, 6, "-"],
+//   [1, 2, 3, "+"],
+//   [0, ".", "="],
+// ];
+const btnValues = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+// const btnValues = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
+
+export default function App() {
+  const [first, setFirst] = useState("");
+  const [second, setSecond] = useState("");
+  const [total, setTotal] = useState();
+  const [focus, setFocus] = useState();
+
+  const plus = () => {
+    setTotal(parseInt(first) + parseInt(second));
+  };
+  const subtract = () => {
+    setTotal(parseInt(first) - parseInt(second));
+  };
+  const multiply = () => {
+    setTotal(parseInt(first) * parseInt(second));
+  };
+  const divide = () => {
+    setTotal(parseInt(first) / parseInt(second));
+  };
+
+  const renderButtonRow = (row, rowIndex) => {
+    return (
+      <View key={rowIndex} style={{ flexDirection: "row" }}>
+        {row.map((btn, index) => (
+          <CustomBtn
+            key={index}
+            onPress={() => handleButtonPress(btn)}
+            value={btn}
+          />
+        ))}
+      </View>
+    );
+  };
+
+  console.log(focus + "-р Input ажиллаж байна");
+  console.log("1-р тоо: " + first);
+  console.log("2-р тоо: " + second);
+
+  return (
+    <SafeAreaView className="flex-1">
+      <View className="flex-1 p-4 justify-center gap-6">
+        <TextInput
+          placeholder="Эхний тоо"
+          className="border border-gray-400 p-3"
+          value={first}
+          onPressIn={() => setFocus(1)}
+          onChangeText={(e) => setFirst(e)}
+          clearButtonMode="while-editing"
+        />
+
+        <TextInput
+          placeholder="Хоёр дахь тоо"
+          className="border border-gray-400 p-3"
+          value={second}
+          onPressIn={() => setFocus(2)}
+          onChangeText={(e) => setSecond(e)}
+          clearButtonMode="while-editing"
+        />
+
+        <View className="flex-col">
+          <View className="flex-row justify-around mb-3 flex-wrap">
+            <CustomBtn
+              onPress={() => [
+                focus === 1 ? setFirst(first + "0") : setSecond(second + "0"),
+              ]}
+              value={0}
+            />
+            <CustomBtn
+              onPress={() => [
+                focus === 1 ? setFirst(first + "1") : setSecond(second + "1"),
+              ]}
+              value={1}
+            />
+            <CustomBtn
+              onPress={() => [
+                focus === 1 ? setFirst(first + "2") : setSecond(second + "2"),
+              ]}
+              value={2}
+            />
+            <CustomBtn
+              onPress={() => [
+                focus === 1 ? setFirst(first + "3") : setSecond(second + "3"),
+              ]}
+              value={"3"}
+            />
+            <CustomBtn
+              onPress={() => [
+                focus === 1 ? setFirst(first + "4") : setSecond(second + "4"),
+              ]}
+              value={4}
+            />
+          </View>
+          <View className="flex-row justify-around">
+            <CustomBtn
+              onPress={() => [
+                focus === 1 ? setFirst(first + "5") : setSecond(second + "5"),
+              ]}
+              value={5}
+            />
+            <CustomBtn
+              onPress={() => [
+                focus === 1 ? setFirst(first + "6") : setSecond(second + "6"),
+              ]}
+              value={6}
+            />
+            <CustomBtn
+              onPress={() => [
+                focus === 1 ? setFirst(first + "7") : setSecond(second + "7"),
+              ]}
+              value={7}
+            />
+            <CustomBtn
+              onPress={() => [
+                focus === 1 ? setFirst(first + "8") : setSecond(second + "8"),
+              ]}
+              value={8}
+            />
+            <CustomBtn
+              onPress={() => [
+                focus === 1 ? setFirst(first + "9") : setSecond(second + "9"),
+              ]}
+              value={9}
+            />
+          </View>
+          <View className="flex-row justify-around">
+            {btnValues.slice(0, 5).map((item) => {
+              return (
+                <CustomBtn
+                  onPress={() => [
+                    focus === 1
+                      ? setFirst(first + item)
+                      : setSecond(second + item),
+                  ]}
+                  value={item}
+                />
+              );
+            })}
+          </View>
+        </View>
+
+        <View className="flex flex-row justify-around">
+          <CustomBtn
+            onPress={() => [
+              focus === 1 ? setFirst(first + ".") : setSecond(second + "."),
+            ]}
+            value={9}
+          />
+          <CustomBtn onPress={plus} bg="bg-red-200" value="+" />
+          <CustomBtn onPress={subtract} bg="bg-red-200" value="-" />
+          <CustomBtn onPress={multiply} bg="bg-red-400" value="X" />
+          <CustomBtn onPress={divide} bg="bg-red-400" value="/" />
+        </View>
+
+        <View className="justify-end pt-10">
+          {/* <Text>Эхний тоо: {first}</Text>
+          <Text>Хоёр дахь тоо: {second}</Text> */}
+          <Text className="text-[40px] font-semibold text-center">
+            {/* {parseFloat(total).toPrecision(3)} */}
+            {parseFloat(total).toFixed(3)}
+          </Text>
+        </View>
+
+        {/* {btnValues.map((row, index) => renderButtonRow(row, index))} */}
+      </View>
+      <StatusBar style="auto" />
+    </SafeAreaView>
+  );
+}
+
+const CustomBtn = ({ value, onPress, bg }) => {
+  return (
+    <TouchableOpacity onPress={onPress}>
+      <View
+        className={`aspect-square rounded-lg p-3 border-2 rounded-1 flex items-center justify-center ${bg}`}
+      >
+        <Text className="text-xl">{value}</Text>
+      </View>
+    </TouchableOpacity>
+  );
+};
